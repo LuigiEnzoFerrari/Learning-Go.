@@ -27,7 +27,7 @@ type RatingProducts struct {
 
 func printObject(object Products, arg string) {
 	if arg == "id" {
-		fmt.Println(object.Id)
+		fmt.Println("id :", object.Id)
 	} else if arg == "title" {
 		fmt.Println("title: ",object.Title)
 	} else if arg == "price" {
