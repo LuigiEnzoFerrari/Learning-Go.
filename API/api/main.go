@@ -35,11 +35,12 @@ func getInput[T any](text string, friendVar *T) {
 
 func getUserInput() Friends {
 	var userInput Friends
+
 	getInput("Enter Friend's Name: ", &userInput.Name)
 	getInput("Enter Friend's Age: ", &userInput.Age)
 	getInput("Enter Friend's Height: ", &userInput.Body.Height)
 	getInput("Enter Friend's Weight: ", &userInput.Body.Weight)
-	fmt.Println("Enter Friend's Birth Date:")
+	fmt.Println("Enter Friend's Birth Date: ")
 	getInput("Enter Friend's Day: ", &userInput.Anniversary.Day)
 	getInput("Enter Friend's Month: ", &userInput.Anniversary.Month)
 	getInput("Enter Friend's Year: ", &userInput.Anniversary.Year)

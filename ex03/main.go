@@ -8,15 +8,15 @@ import (
 	// "encoding/json"
 )
 
+// get a json request and send it to the server
+
 func YourHandler(w http.ResponseWriter, r *http.Request) {
 	response, _ := http.Get("https://fakestoreapi.com/products?limit=2")
 	responseData, _ := ioutil.ReadAll(response.Body)
-	// res, _ := json.Marshal(responseData)
-	// w.Write(responseData)
+	defer response.Body.Close()
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(responseData)
-	// []byte("Gorilla!\n")
 }
 
 func main() {

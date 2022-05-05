@@ -45,6 +45,8 @@ func printObject(object Products, arg string) {
 	}
 }
 
+// if the arg is a valid one return true 
+
 func findElement(arg string) bool {
 	var types []string =  []string {
 		"id", "title", "price", "description",
@@ -57,14 +59,18 @@ func findElement(arg string) bool {
 	return false
 }
 
-func checkNumber(age string) int {
-	intVar, err := strconv.Atoi(age)
+// check if is a number
+
+func checkNumber(number string) int {
+	intVar, err := strconv.Atoi(number)
 	if err != nil {
 		fmt.Println("Error:", err)
 		os.Exit(1)
 	}
 	return intVar
 }
+
+// check if is a valid argument
 
 func checkArgs(args []string) {
 	for _, value := range args {
@@ -73,35 +79,49 @@ func checkArgs(args []string) {
 			os.Exit(1)
 		}
 	}
-	return
 }
 
-func main() {
-	args := os.Args[1:]
+// get response data from url
+
+func getRespose(url string, args []string) []byte {
 	checkNumber(args[0])
-	response, err := http.Get("https://fakestoreapi.com/products?limit=" + args[0])
+	response, err := http.Get(url + args[0])
 	if err != nil {
 		fmt.Print(err.Error())
 		os.Exit(1)
 	}
 	args = args[1:]
 	checkArgs(args)
-
 	responseData, err := ioutil.ReadAll(response.Body)
+	
+	if err != nil {
+		log.Fatal(err)
+		os.Exit(1)
+	}
+	return responseData
+}
+
+// Print all data
+func printData(responseData []byte, args []string, responseObject []Products) {
+	args = args[1:]
+	err := json.Unmarshal(responseData, &responseObject)
 	if err != nil {
 		log.Fatal(err)
 		os.Exit(1)
 	}
 
-	var responseObject []Products
-	json.Unmarshal(responseData, &responseObject)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
 	for _, value := range responseObject {
 		for _, arg := range args {
 			printObject(value, arg)
 		}
+		fmt.Println("")
 	}
+}
+
+func main() {
+	var responseObject []Products
+	args := os.Args[1:]
+	responseData := getRespose("https://fakestoreapi.com/products?limit=", args)
+	printData(responseData, args, responseObject)
+
 }
